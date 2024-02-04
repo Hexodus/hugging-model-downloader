@@ -1,42 +1,50 @@
-# ggml-downloader
+# Hugging Model Downloader
+This downloader supports parallel download of multiple chunks and is therefore way faster then the direct browser download. As the models tend to be very large, this is the best way to go.
+The downloader works with both GGUF and GGML model files.
 
-**Problem:** huggingface `download_model` only supports parallel download when the model is chunked.
+## Fork
+This is a fork from:
 
-GGML models can be quite large (30B+ especially) but chunking is not supported its always a single .bin file.
+[ggml-downloader / the-crypt-keeper](https://github.com/the-crypt-keeper/ggml-downloader) - thank you buddy!
 
-**Solution:** use pypdl library that implements multi-threaded downloading via dynamic chunking
+Which I adjusted to my presonal needs and this translates mainly to adding the simplifyed way to download models by url. And I also fixed the branch prop checking. Made output colorful ...
 
-## Requirements
-
-* [pypdl](https://github.com/m-jishnu/pypdl) :heart_eyes:
-* [huggingface_hub](https://github.com/huggingface/huggingface_hub) :rocket:
-* [python-fire](https://github.com/google/python-fire) :fire:
-* requests
+## Libs Installation
 
 `pip install -r requirements.txt`
 
-## Usage - Command line
+## Usage via Command Line (CMD) 
+### CMD - Simple Url Download
+Those who have the full download url can use it in a simple way by just providing the url.
 
-`./download.py <model> [--quant <quant>] [--branch <branch>]`
+`./download.py <url> [--target <target>]`
 
-`<model>` is the model you're downloading for example `TheBloke/vicuna-33B-GGML`
+`<target>` is optional, it specifies the directory where the downloaded files will be saved. If omitted, files will be saved in the current directory
+
+Example:
+
+`https://huggingface.co/TheBloke/Mixtral-8x7B-MoE-RP-Story-GGUF/resolve/main/mixtral-8x7b-moe-rp-story.Q4_K_M.gguf --target d:\models\`
+
+## CMD - Advanced Download
+
+`./download.py <model> [--quant <quant>] [--branch <branch>] [--target <target>]`
+
+`<model>` can be either the model name you're downloading, for example `TheBloke/Mixtral-8x7B-MoE-RP-Story-GGUF`
 
 `<quant>` is the quantization you're downloading for example `q5_0` (default is `*` which will download all files)
 
-`<branch>` is optional, if omitted will download from first avilable branch
+`<branch>` is optional, if omitted will download from first available branch
 
-## Usage - High level API
+`<target>` is optional, it specifies the directory where the downloaded files will be saved. If omitted, files will be saved in the current directory
 
-`from download import download_model` and call `download_model(model_name : str, quant : str = "*")`
+Example A:
 
-### Usage - Low level API
+`./download.py TheBloke/Mixtral-8x7B-MoE-RP-Story-GGUF --quant Q4_K_M --branch main --target ./models/`
 
-1. Import the helper functions: `from download import get_filenames, build_url, get_redirect_header, parallel_download`
+Which would result in the same single file as shown in the simple url example.
 
-2. Get the branch and filename of the quant you're looking for: `get_filenames(model_name, quant)` returns a `(branch, filename)` iterator
+Example B:
 
-3. Build the HF download URL: `build_url(model_name, branch, filename)` returns `url`
+`./download.py TheBloke/Mixtral-8x7B-MoE-RP-Story-GGUF --target ./models/`
 
-4. Get the LFS URL: `get_redirect_header(url)` returns `lfs_url`
-
-5. Download the file: `parallel_download(lfs_url, filename)` will create `filename` in the current directory
+This would result in the download of ALL the quants which is a time saver if it's what you want to do.
