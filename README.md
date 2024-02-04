@@ -2,12 +2,14 @@
 This downloader supports parallel download of multiple chunks and is therefore way faster then the direct browser download. As the models tend to be very large, this is the best way to go.
 The downloader works with both GGUF and GGML model files.
 
+![Screenshot](screenshot.png)
+
 ## Fork
-This is a fork from:
+This is forked from:
 
 [ggml-downloader / the-crypt-keeper](https://github.com/the-crypt-keeper/ggml-downloader) - thank you buddy!
 
-Which I adjusted to my presonal needs and this translates mainly to adding the simplifyed way to download models by url. And I also fixed the branch prop checking. Made output colorful ...
+Which I adjusted to my presonal needs and this translates mainly to adding the simplified way to download models by url, fixing the prop checking, adding a destination prop and making it more colorful.
 
 ## Libs Installation
 
