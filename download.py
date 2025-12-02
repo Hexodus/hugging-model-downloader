@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from pypdl import Downloader
+from pypdl import downloader
 from urllib.parse import urlparse
 from huggingface_hub import HfApi
 from huggingface_hub.utils import RepositoryNotFoundError
@@ -46,13 +46,14 @@ def build_url(model_name, branch, filename):
 def parallel_download(lfs_url, target, filename):
     file_path = ""
     if len(target) > 0 :
-        if not target.endswith('/'):
-            target = target + '/'
+        if not target.endswith('/'):  
+            target = target + '/'  
         file_path = target + filename
     else:
         file_path = filename
-    dl = Downloader()
+    dl = downloader()
     dl.start(lfs_url, file_path)
+
 
 def parse_model_name(model_name: str, quant: str, branch: str):
     """Parse model_name to check if it's a URL and extract parameters if so"""
